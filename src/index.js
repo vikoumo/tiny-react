@@ -1,19 +1,19 @@
 import TinyReact from "./TinyReact";
 // import React from "React"
 
-// const Heart = (props) => <span>{props.title}Heart<Demo /></span>
-// const Demo = () => <span>demo</span>
-// class Alert extends TinyReact.Component {
-//   constructor(props) {
-//     // 子类需要通过 super 方法将自身的 props 属性传递给 Component父类，
-//     // 父类会将 props 属性挂载为父类属性，子类继承了父类，自己本身也就自然拥有props属性
-//     // 这样做的好处是当 props 发生更新后，父类可以根据更新后的 props 帮助子类更新视图
-//     super(props);
-//   }
-//   render() {
-//     return <div>classComponent{this.props.name}{this.props.age}</div>
-//   }
-// }
+const Heart = (props) => <div>{props.title}&hearts;<Demo /></div>
+const Demo = () => <span>demo</span>
+class Alert extends TinyReact.Component {
+  constructor(props) {
+    // 子类需要通过 super 方法将自身的 props 属性传递给 Component父类，
+    // 父类会将 props 属性挂载为父类属性，子类继承了父类，自己本身也就自然拥有props属性
+    // 这样做的好处是当 props 发生更新后，父类可以根据更新后的 props 帮助子类更新视图
+    super(props);
+  }
+  render() {
+    return <div>classComponent{this.props.name}{this.props.age}</div>
+  }
+}
 
 const virtualDOM = (
   <div className="container">
@@ -30,8 +30,10 @@ const virtualDOM = (
     <h3>这个将会被删除</h3>
     2, 3
     <input type="text" value="13" />
-    {/* <Heart title="hello"/>
-    <Alert name="cc" age="20" /> */}
+    {/* 函数组件 */}
+    <Heart title="hello"/>
+    {/* 类组件 */}
+    <Alert name="cc" age="20" />
   </div>
 )
 console.log('virtualDOM', virtualDOM);
