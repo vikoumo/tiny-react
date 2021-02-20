@@ -49,13 +49,14 @@ const modifyDOM = (
     <h3>(观察: 这个将会被改变)</h3>
     {2 == 1 && <div>如果2和1相等渲染当前内容</div>}
     {2 == 2 && <div>2</div>}
+    <h5>这是一段修改后的内容</h5>
     <button onClick={() => alert("你好!!!!!")}>点击我</button>
-    <input type="text" value="13" />
+    <input type="text" value="130" />
   </div>
 )
 const root = document.getElementById('root');
 TinyReact.render(virtualDOM, root);
-// setTimeout(() => {
-//   TinyReact.render(modifyDOM, root)
-// }, 2000)
+setTimeout(() => {
+  TinyReact.render(modifyDOM, root)
+}, 2000)
 
