@@ -3,8 +3,9 @@ import mountNativeElement from "./mountNativeElement"
 import isNativeElement from "./isNativeElement"
 import mountElement from "./mountElement"
 
-export default function mountComponent(virtualDOM, container) {
+export default function mountComponent(virtualDOM, container, oldDOM) {
   let nextVirtualDOM = null;
+  let instance = null;
   // 判断组件是类组件还是函数组件
   if (isFunctionComponent(virtualDOM)) {
     // 函数组件
@@ -15,9 +16,18 @@ export default function mountComponent(virtualDOM, container) {
   } else {
     // 类组件
     // 实例化类组件 得到类组件实例对象 并将 props 属性传递进类组件
-    const instance = new virtualDOM.type(virtualDOM.props || {});
+    instance = new virtualDOM.type(virtualDOM.props || {});
     // 调用类组件中的render方法得到要渲染的 Virtual DOM
     nextVirtualDOM = instance.render();
+    nextVirtualDOM.component = instance;
   }
-  mountElement(nextVirtualDOM, container);
+  mountElement(nextVirtualDOM, container, oldDOM);
+
+  if (instance) {
+    instance.componentDidMount();
+    // 实例上执行ref方法
+    if (instance.props && instance.props.ref) {
+      instance.props.ref(instance);
+    }
+  }
 }

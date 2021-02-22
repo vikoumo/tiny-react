@@ -9,9 +9,63 @@ class Alert extends TinyReact.Component {
     // 父类会将 props 属性挂载为父类属性，子类继承了父类，自己本身也就自然拥有props属性
     // 这样做的好处是当 props 发生更新后，父类可以根据更新后的 props 帮助子类更新视图
     super(props);
+    this.state = {
+      title: "default title"
+    }
+    // 更改 handleChange 方法中的 this 指向 让 this 指向类实例对象
+    this.hanleClick = this.hanleClick.bind(this);
   }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps', nextProps);
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log('componentWillUpdate', nextProps, nextState);
+  }
+
+  componentDidUpdate(prevProps, preState) {
+    console.log('componentDidUpdate', prevProps, preState);
+  }
+
+  hanleClick () {
+    this.setState({title: "change title"})
+  }
+
   render() {
-    return <div>classComponent{this.props.name}{this.props.age}</div>
+    return (<div>
+      classComponent:
+      {this.props.name}
+      {this.props.age}
+      <div>
+        {this.state.title}
+        <button onClick = {this.hanleClick}>改变title</button>
+      </div>
+    </div>)
+  }
+}
+
+class DemoRef extends TinyReact.Component {
+  constructor(props) {
+    super(props);
+    this.hanleClick = this.hanleClick.bind(this);
+  }
+  hanleClick() {
+    console.log(this.input.value);
+    console.log(this.heart);
+  }
+  componentDidMount() {
+    console.log('componentDidMount');
+  }
+  // ref的作用 -> 获取子组件的实例或者Dom对象
+  // 传统的react中，只有类组件可以创建实例，函数组件不能创建实例
+  // 所以只有类组件和原生组件可以用ref
+  render() {
+    return (<div>
+      <input type="text" ref={input => this.input = input} />
+      <Alert name="ref" age="ref" ref={heart => this.heart = heart} />
+      <button onClick={this.hanleClick}>获取输入框值</button>
+    </div>)
   }
 }
 
@@ -34,6 +88,7 @@ const virtualDOM = (
     <Heart title="hello"/>
     {/* 类组件 */}
     <Alert name="cc" age="20" />
+    <DemoRef />
   </div>
 )
 console.log('virtualDOM', virtualDOM);
@@ -52,11 +107,63 @@ const modifyDOM = (
     <h5>这是一段修改后的内容</h5>
     <button onClick={() => alert("你好!!!!!")}>点击我</button>
     <input type="text" value="130" />
+    <Alert name="jade" age="30" />
   </div>
 )
 const root = document.getElementById('root');
-TinyReact.render(virtualDOM, root);
-setTimeout(() => {
-  TinyReact.render(modifyDOM, root)
-}, 2000)
+// TinyReact.render(virtualDOM, root);
+// setTimeout(() => {
+//   TinyReact.render(modifyDOM, root)//有问题
+// }, 2000)
+
+class KeyDemo extends TinyReact.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      persons: [
+        {
+          id: 1,
+          name: "张三"
+        },
+        {
+          id: 2,
+          name: "李四"
+        },
+        {
+          id: 3,
+          name: "王五"
+        },
+        {
+          id: 4,
+          name: "赵六"
+        }
+      ]
+    }
+    this.handleClick = this.handleClick.bind(this)
+  }
+  handleClick() {
+    const newState = JSON.parse(JSON.stringify(this.state))
+    // newState.persons.push(newState.persons.shift())
+    // newState.persons.splice(1, 0, { id: 100, name: "李逵" })
+    newState.persons.pop()
+    this.setState(newState)
+  }
+  render() {
+    return (
+      <div>
+        <ul>
+          {this.state.persons.map(person => (
+            <li key={person.id}>
+              {person.name}
+              <DemoRef />
+            </li>
+          ))}
+        </ul>
+        <button onClick={this.handleClick}>按钮</button>
+      </div>
+    )
+  }
+}
+
+TinyReact.render(<KeyDemo />, root)
 
