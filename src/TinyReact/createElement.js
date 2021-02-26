@@ -6,15 +6,19 @@
  * @return {object} Virtual DOM
  */
 export default function createElement(type, props, ...children) {
-  const childElement = children.reduce((arr, child) => {
+  const childElements = [].concat(...children).reduce((result, child) => {
     if (typeof child !== 'boolean' && child !== null) {
-      child instanceof Object ? arr.push(child) : arr.push(createElement('text', {textContent: child}))
+      if (child instanceof Object) {
+        result.push(child)
+      } else {
+        result.push(createElement("text", { textContent: child }))
+      }
     }
-    return arr;
+    return result
   }, [])
   return {
     type,
-    props: Object.assign({children: childElement}, props),
-    children: childElement,
+    props: Object.assign({children: childElements}, props),
+    children: childElements,
   }
 }
