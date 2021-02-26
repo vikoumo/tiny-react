@@ -57,6 +57,9 @@ class DemoRef extends TinyReact.Component {
   componentDidMount() {
     console.log('componentDidMount');
   }
+  componentWillUnmount() {
+    console.log('componentWillUnmount');
+  }
   // ref的作用 -> 获取子组件的实例或者Dom对象
   // 传统的react中，只有类组件可以创建实例，函数组件不能创建实例
   // 所以只有类组件和原生组件可以用ref
@@ -91,7 +94,7 @@ const virtualDOM = (
     <DemoRef />
   </div>
 )
-console.log('virtualDOM', virtualDOM);
+// console.log('virtualDOM', virtualDOM);
 
 
 const modifyDOM = (
@@ -153,10 +156,10 @@ class KeyDemo extends TinyReact.Component {
       <div>
         <ul>
           {this.state.persons.map(person => (
-            <li key={person.id}>
+            <div key={person.id}>
               {person.name}
               <DemoRef />
-            </li>
+            </div>
           ))}
         </ul>
         <button onClick={this.handleClick}>按钮</button>
