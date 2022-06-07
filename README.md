@@ -1,2 +1,2 @@
 # tiny-react
-react15简单的diff和virtualDOM
+react15 的 diff和virtualDOM 实现简单版本
